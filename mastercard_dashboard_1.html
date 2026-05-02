@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mastercard (MA) — Stock Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: #f5f4f0; color: #1a1a18; min-height: 100vh; padding: 2rem; }
+  .page { max-width: 1100px; margin: 0 auto; }
+  .dashboard { background: #ffffff; border-radius: 18px; border: 0.5px solid rgba(0,0,0,0.1); overflow: hidden; }
+
+  .header { display: flex; align-items: center; justify-content: space-between; padding: 1.5rem 2rem 1.25rem; border-bottom: 0.5px solid rgba(0,0,0,0.08); }
+  .brand { display: flex; align-items: center; gap: 14px; }
+  .logo { width: 42px; height: 42px; position: relative; }
+  .logo-left { width: 26px; height: 26px; border-radius: 50%; background: #EB001B; position: absolute; left: 0; top: 8px; }
+  .logo-right { width: 26px; height: 26px; border-radius: 50%; background: #F79E1B; position: absolute; left: 14px; top: 8px; opacity: 0.88; }
+  .brand-name { font-family: 'DM Serif Display', serif; font-size: 22px; color: #1a1a18; }
+  .brand-sub { font-size: 12px; color: #888780; margin-top: 2px; }
+  .price-block { text-align: right; }
+  .price-main { font-family: 'DM Serif Display', serif; font-size: 36px; color: #1a1a18; }
+  .price-label { font-size: 12px; color: #888780; margin-top: 2px; }
+  .badge-buy { background: #e8f7ef; color: #1a7a45; font-size: 11px; font-weight: 500; padding: 4px 12px; border-radius: 20px; display: inline-block; margin-top: 6px; }
+
+  .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; padding: 1.25rem 2rem; background: #faf9f6; border-bottom: 0.5px solid rgba(0,0,0,0.06); }
+  .kpi { background: #ffffff; border-radius: 12px; padding: 1rem 1.1rem; border: 0.5px solid rgba(0,0,0,0.07); }
+  .kpi-label { font-size: 10px; color: #888780; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 5px; }
+  .kpi-val { font-size: 24px; font-weight: 500; color: #1a1a18; }
+  .kpi-sub { font-size: 11px; color: #888780; margin-top: 3px; }
+  .kpi-up { color: #1a7a45; font-weight: 500; }
+
+  .main-grid { display: grid; grid-template-columns: 1fr 260px; gap: 14px; padding: 1.5rem 2rem 0; }
+  .bottom-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; padding: 1rem 2rem; }
+  .range-section { padding: 0 2rem 1.5rem; }
+
+  .card { background: #ffffff; border: 0.5px solid rgba(0,0,0,0.08); border-radius: 14px; padding: 1.25rem 1.5rem; }
+  .card-title { font-size: 10px; font-weight: 500; color: #888780; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+  .side-col { display: flex; flex-direction: column; gap: 14px; }
+
+  .legend-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 10px; }
+  .leg { display: flex; align-items: center; gap: 5px; font-size: 11px; color: #888780; }
+  .leg-sq { width: 9px; height: 9px; border-radius: 2px; flex-shrink: 0; }
+
+  .metric-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 0.5px solid rgba(0,0,0,0.06); }
+  .metric-row:last-child { border-bottom: none; }
+  .metric-lbl { font-size: 12px; color: #888780; }
+  .metric-val { font-size: 13px; font-weight: 500; color: #1a1a18; }
+  .metric-green { color: #1a7a45; }
+
+  .range-track { height: 7px; background: #f0ede6; border-radius: 4px; position: relative; margin: 10px 0 6px; }
+  .range-fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg, #185FA5, #EB001B); }
+  .range-dot { width: 13px; height: 13px; border-radius: 50%; background: #1a1a18; border: 2px solid #fff; box-shadow: 0 1px 4px rgba(0,0,0,0.2); position: absolute; top: -3px; transform: translateX(-50%); }
+  .range-labels { display: flex; justify-content: space-between; font-size: 11px; color: #888780; }
+  .range-note { text-align: center; font-size: 11px; color: #888780; margin-top: 6px; }
+
+  .footer { text-align: center; font-size: 11px; color: #aaa; padding: 1rem; border-top: 0.5px solid rgba(0,0,0,0.06); }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="dashboard">
+
+    <div class="header">
+      <div class="brand">
+        <div class="logo">
+          <div class="logo-left"></div>
+          <div class="logo-right"></div>
+        </div>
+        <div>
+          <div class="brand-name">Mastercard <span style="font-family:'DM Sans',sans-serif;font-size:15px;font-weight:400;color:#888780">NYSE: MA</span></div>
+          <div class="brand-sub">Mastercard Incorporated · Financial Services · Technology · 35,300 employees</div>
+        </div>
+      </div>
+      <div class="price-block">
+        <div class="price-main">$528.36</div>
+        <div class="price-label">Last Close · USD</div>
+        <div class="badge-buy">Analyst: BUY</div>
+      </div>
+    </div>
+
+    <div class="kpi-grid">
+      <div class="kpi">
+        <div class="kpi-label">Market Cap</div>
+        <div class="kpi-val">$481.7B</div>
+        <div class="kpi-sub">NYSE Listed</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">Revenue (TTM)</div>
+        <div class="kpi-val">$28.2B</div>
+        <div class="kpi-sub"><span class="kpi-up">+14.4%</span> YoY growth</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">Free Cash Flow</div>
+        <div class="kpi-val">$14.5B</div>
+        <div class="kpi-sub">51.3% FCF margin</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">Earnings Growth</div>
+        <div class="kpi-val"><span class="kpi-up">+22.3%</span></div>
+        <div class="kpi-sub">YoY earnings</div>
+      </div>
+    </div>
+
+    <div class="main-grid">
+      <div class="card">
+        <div class="card-title">Monthly closing price — last 24 months</div>
+        <div style="position:relative;width:100%;height:220px;">
+          <canvas id="priceChart" role="img" aria-label="Line chart of Mastercard monthly closing prices over 24 months"></canvas>
+        </div>
+      </div>
+
+      <div class="side-col">
+        <div class="card">
+          <div class="card-title">Margin breakdown</div>
+          <div style="position:relative;height:160px;">
+            <canvas id="marginPie" role="img" aria-label="Donut chart: net profit 45.7%, operating margin 56.3%"></canvas>
+          </div>
+          <div class="legend-row">
+            <div class="leg"><span class="leg-sq" style="background:#185FA5"></span>Net profit 45.7%</div>
+            <div class="leg"><span class="leg-sq" style="background:#EB001B"></span>Operating 56.3%</div>
+            <div class="leg"><span class="leg-sq" style="background:#E2E0D8"></span>Other 43.7%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bottom-grid">
+      <div class="card">
+        <div class="card-title">Annual closing price 2006–2024</div>
+        <div style="position:relative;width:100%;height:200px;">
+          <canvas id="yearBar" role="img" aria-label="Bar chart of annual closing price from 2006 to 2024"></canvas>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Capital structure & key ratios</div>
+        <div style="position:relative;height:150px;">
+          <canvas id="balanceChart" role="img" aria-label="Donut: cash $8.8B, debt $19B, FCF $14.5B"></canvas>
+        </div>
+        <div class="legend-row">
+          <div class="leg"><span class="leg-sq" style="background:#1D9E75"></span>Cash $8.8B</div>
+          <div class="leg"><span class="leg-sq" style="background:#E24B4A"></span>Debt $19.0B</div>
+          <div class="leg"><span class="leg-sq" style="background:#378ADD"></span>FCF $14.5B</div>
+        </div>
+        <div style="margin-top:14px">
+          <div class="metric-row"><span class="metric-lbl">P/E Ratio</span><span class="metric-val">38.1×</span></div>
+          <div class="metric-row"><span class="metric-lbl">Price / Book</span><span class="metric-val">74.5×</span></div>
+          <div class="metric-row"><span class="metric-lbl">Beta</span><span class="metric-val">1.10</span></div>
+          <div class="metric-row"><span class="metric-lbl">Dividend Yield</span><span class="metric-val">0.57%</span></div>
+          <div class="metric-row"><span class="metric-lbl">Return on Equity</span><span class="metric-val metric-green">190.6%</span></div>
+          <div class="metric-row"><span class="metric-lbl">Return on Assets</span><span class="metric-val metric-green">22.7%</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="range-section">
+      <div class="card">
+        <div class="card-title">52-week price range</div>
+        <div class="range-labels">
+          <span>Low: $428.86</span>
+          <span style="font-weight:500;color:#1a1a18">Current: $528.36</span>
+          <span>High: $582.23</span>
+        </div>
+        <div class="range-track">
+          <div class="range-fill" style="width:100%;"></div>
+          <div class="range-dot" style="left:64.8%;"></div>
+        </div>
+        <div class="range-note">Current price at 64.8% of 52-week range · Payout ratio: 19.0% · Dividend yield: 0.57%</div>
+      </div>
+    </div>
+
+
+  </div>
+</div>
+
+<script>
+const monthly = [
+  {m:'Apr 23',c:376.20},{m:'May 23',c:361.34},{m:'Jun 23',c:389.33},{m:'Jul 23',c:390.87},
+  {m:'Aug 23',c:409.07},{m:'Sep 23',c:392.48},{m:'Oct 23',c:373.63},{m:'Nov 23',c:410.84},
+  {m:'Dec 23',c:423.43},{m:'Jan 24',c:446.69},{m:'Feb 24',c:472.08},{m:'Mar 24',c:478.85},
+  {m:'Apr 24',c:449.27},{m:'May 24',c:445.16},{m:'Jun 24',c:439.28},{m:'Jul 24',c:462.41},
+  {m:'Aug 24',c:481.99},{m:'Sep 24',c:492.42},{m:'Oct 24',c:498.85},{m:'Nov 24',c:532.16},
+  {m:'Dec 24',c:525.80},{m:'Jan 25',c:555.43},{m:'Feb 25',c:576.31},{m:'Mar 25',c:528.36}
+];
+
+new Chart(document.getElementById('priceChart'), {
+  type: 'line',
+  data: {
+    labels: monthly.map(d=>d.m),
+    datasets: [{
+      label: 'Close', data: monthly.map(d=>d.c),
+      borderColor: '#185FA5', backgroundColor: 'rgba(24,95,165,0.07)',
+      borderWidth: 2.5, fill: true, tension: 0.4,
+      pointRadius: 3, pointHoverRadius: 6, pointBackgroundColor: '#185FA5'
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => '$'+ctx.parsed.y.toFixed(2) } } },
+    scales: {
+      x: { ticks: { font:{size:10}, maxRotation:45, autoSkip:true, maxTicksLimit:12, color:'#888' }, grid:{display:false} },
+      y: { ticks: { font:{size:10}, color:'#888', callback: v=>'$'+v }, grid:{color:'rgba(128,128,128,0.1)'} }
+    }
+  }
+});
+
+new Chart(document.getElementById('marginPie'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Net Profit Margin','Operating (excl. net)','Remaining'],
+    datasets: [{ data:[45.7,10.6,43.7], backgroundColor:['#185FA5','#EB001B','#E2E0D8'], borderWidth:0, hoverOffset:6 }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false, cutout: '64%',
+    plugins: { legend:{display:false}, tooltip:{callbacks:{label: ctx=>ctx.label+': '+ctx.parsed.toFixed(1)+'%'}} }
+  }
+});
+
+const yearly = [
+  {y:"'06",c:9.0},{y:"'07",c:19.7},{y:"'08",c:13.2},{y:"'09",c:23.6},{y:"'10",c:20.7},
+  {y:"'11",c:34.6},{y:"'12",c:45.7},{y:"'13",c:78.0},{y:"'14",c:80.9},{y:"'15",c:92.1},
+  {y:"'16",c:98.4},{y:"'17",c:145.4},{y:"'18",c:182.2},{y:"'19",c:289.9},{y:"'20",c:348.5},
+  {y:"'21",c:352.5},{y:"'22",c:343.1},{y:"'23",c:423.4},{y:"'24",c:525.8}
+];
+
+new Chart(document.getElementById('yearBar'), {
+  type: 'bar',
+  data: {
+    labels: yearly.map(d=>d.y),
+    datasets: [{
+      label: 'Close', data: yearly.map(d=>d.c),
+      backgroundColor: yearly.map((d,i) => d.c >= (yearly[i-1]?.c||0) ? 'rgba(24,95,165,0.75)' : 'rgba(226,75,74,0.75)'),
+      borderRadius: 3, borderSkipped: false
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend:{display:false}, tooltip:{callbacks:{label: ctx=>'$'+ctx.parsed.y.toFixed(2)}} },
+    scales: {
+      x: { ticks:{font:{size:9},color:'#888'}, grid:{display:false} },
+      y: { ticks:{font:{size:10},color:'#888',callback: v=>'$'+v}, grid:{color:'rgba(128,128,128,0.1)'} }
+    }
+  }
+});
+
+new Chart(document.getElementById('balanceChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Cash','Total Debt','Free Cash Flow'],
+    datasets: [{ data:[8.77,18.99,14.46], backgroundColor:['#1D9E75','#E24B4A','#378ADD'], borderWidth:0, hoverOffset:5 }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false, cutout: '60%',
+    plugins: { legend:{display:false}, tooltip:{callbacks:{label: ctx=>ctx.label+': $'+ctx.parsed.toFixed(1)+'B'}} }
+  }
+});
+</script>
+</body>
+</html>
