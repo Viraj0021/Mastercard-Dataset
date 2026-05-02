@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Interview Q&A — Mastercard (MA)</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: #f5f4f0; color: #1a1a18; min-height: 100vh; padding: 2rem; }
+  .page { max-width: 1000px; margin: 0 auto; }
+  .dashboard { background: #ffffff; border-radius: 18px; border: 0.5px solid rgba(0,0,0,0.1); overflow: hidden; }
+
+  .top-bar { display: flex; align-items: center; justify-content: space-between; padding: 1.5rem 2rem 1.25rem; border-bottom: 0.5px solid rgba(0,0,0,0.08); }
+  .top-title { font-family: 'DM Serif Display', serif; font-size: 22px; color: #1a1a18; }
+  .top-sub { font-size: 12px; color: #888780; margin-top: 3px; }
+  .badge-mc { background: #e6f1fb; color: #185FA5; font-size: 11px; font-weight: 500; padding: 6px 14px; border-radius: 20px; white-space: nowrap; }
+
+  .body-wrap { padding: 1.5rem 2rem 2rem; display: flex; flex-direction: column; gap: 14px; }
+
+  .qa-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .card { background: #ffffff; border: 0.5px solid rgba(0,0,0,0.08); border-radius: 14px; padding: 1.25rem 1.5rem; }
+  .q-num { font-size: 10px; font-weight: 500; color: #185FA5; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
+  .q-text { font-size: 14px; font-weight: 500; color: #1a1a18; margin-bottom: 10px; line-height: 1.4; }
+  .a-text { font-size: 13px; color: #5f5e5a; line-height: 1.7; }
+  .highlight { color: #1a7a45; font-weight: 500; }
+  .highlight-b { color: #185FA5; font-weight: 500; }
+
+  .divider { height: 0.5px; background: rgba(0,0,0,0.07); margin: 8px 0; }
+
+  .pill-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+  .pill { font-size: 11px; padding: 4px 11px; border-radius: 20px; font-weight: 500; }
+  .pill-blue { background: #e6f1fb; color: #185FA5; }
+  .pill-green { background: #eaf3de; color: #3b6d11; }
+  .pill-warn { background: #faeeda; color: #854f0b; }
+
+  .mini-stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 12px; }
+  .mini-stat { background: #faf9f6; border-radius: 10px; padding: 9px 11px; }
+  .ms-label { font-size: 10px; color: #888780; text-transform: uppercase; letter-spacing: 0.06em; }
+  .ms-val { font-size: 18px; font-weight: 500; color: #1a1a18; margin-top: 3px; }
+
+  .bar-row { margin-top: 14px; display: flex; flex-direction: column; gap: 10px; }
+  .bar-item { display: flex; flex-direction: column; gap: 4px; }
+  .bar-label { display: flex; justify-content: space-between; font-size: 12px; color: #888780; }
+  .bar-track { height: 7px; background: #f0ede6; border-radius: 4px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 4px; }
+
+  .improve-row { display: flex; flex-direction: column; gap: 0; margin-top: 12px; }
+  .improve-item { display: flex; justify-content: space-between; align-items: center; padding: 9px 0; border-bottom: 0.5px solid rgba(0,0,0,0.06); }
+  .improve-item:last-child { border-bottom: none; }
+  .improve-lbl { font-size: 12px; color: #888780; }
+  .arrow { font-size: 14px; color: #b4b2a9; }
+  .improve-fix { font-size: 12px; color: #1a7a45; font-weight: 500; }
+
+  .step-row { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
+  .step { display: flex; align-items: flex-start; gap: 10px; }
+  .step-num { width: 22px; height: 22px; border-radius: 50%; background: #e6f1fb; color: #185FA5; font-size: 11px; font-weight: 500; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+  .step-txt { font-size: 13px; color: #5f5e5a; line-height: 1.5; }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="dashboard">
+
+    <div class="top-bar">
+      <div>
+        <div class="top-title">Dashboard interview Q&A</div>
+        <div class="top-sub">5 questions · Illustrated with Mastercard (MA) data</div>
+      </div>
+      <div class="badge-mc">NYSE: MA · $528.36 · Analyst: BUY</div>
+    </div>
+
+    <div class="body-wrap">
+
+      <div class="qa-grid">
+        <div class="card">
+          <div class="q-num">Q1</div>
+          <div class="q-text">Explain a dashboard you built.</div>
+          <div class="a-text">Built a full financial dashboard for <span class="highlight-b">Mastercard (MA)</span> using historical stock data — price trends, margins, capital structure, and 52-week range in one unified view.</div>
+          <div class="mini-stat-row">
+            <div class="mini-stat"><div class="ms-label">Market cap</div><div class="ms-val">$481.7B</div></div>
+            <div class="mini-stat"><div class="ms-label">Revenue</div><div class="ms-val">$28.2B</div></div>
+            <div class="mini-stat"><div class="ms-label">Chart types</div><div class="ms-val">5 types</div></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="q-num">Q2</div>
+          <div class="q-text">How do you make visualizations user-friendly?</div>
+          <div class="a-text">Clear hierarchy, consistent color coding, minimal clutter, and logical grouping of related metrics. Tooltips let users explore details without overwhelming the main view.</div>
+          <div class="pill-row">
+            <span class="pill pill-blue">Visual hierarchy</span>
+            <span class="pill pill-green">Color coding</span>
+            <span class="pill pill-blue">Tooltips</span>
+            <span class="pill pill-green">Clean layout</span>
+            <span class="pill pill-blue">Minimal labels</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="q-num">Q3</div>
+        <div class="q-text">How do you present insights to non-technical stakeholders?</div>
+        <div class="a-text">Lead with the headline and the "so what." For Mastercard: <span class="highlight">"Stock grew from $9 to $528 over 18 years, driven by a 45.7% profit margin."</span> Avoid jargon, use plain labels, and let visuals carry the story. Choose charts based on what's easiest to read, not what's most technically impressive.</div>
+        <div class="bar-row">
+          <div class="bar-item">
+            <div class="bar-label"><span>Net profit margin</span><span>45.7%</span></div>
+            <div class="bar-track"><div class="bar-fill" style="width:45.7%;background:#185FA5;"></div></div>
+          </div>
+          <div class="bar-item">
+            <div class="bar-label"><span>Operating margin</span><span>56.3%</span></div>
+            <div class="bar-track"><div class="bar-fill" style="width:56.3%;background:#1D9E75;"></div></div>
+          </div>
+          <div class="bar-item">
+            <div class="bar-label"><span>Revenue growth YoY</span><span>14.4%</span></div>
+            <div class="bar-track"><div class="bar-fill" style="width:14.4%;background:#BA7517;"></div></div>
+          </div>
+          <div class="bar-item">
+            <div class="bar-label"><span>Earnings growth YoY</span><span>22.3%</span></div>
+            <div class="bar-track"><div class="bar-fill" style="width:22.3%;background:#D4537E;"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="qa-grid">
+        <div class="card">
+          <div class="q-num">Q4</div>
+          <div class="q-text">What would you improve in a poorly designed dashboard?</div>
+          <div class="improve-row">
+            <div class="improve-item">
+              <span class="improve-lbl">Too much information</span>
+              <span class="arrow">→</span>
+              <span class="improve-fix">Top 5–6 metrics only</span>
+            </div>
+            <div class="improve-item">
+              <span class="improve-lbl">Inconsistent colors</span>
+              <span class="arrow">→</span>
+              <span class="improve-fix">Assign meaning per color</span>
+            </div>
+            <div class="improve-item">
+              <span class="improve-lbl">Missing context</span>
+              <span class="arrow">→</span>
+              <span class="improve-fix">Add YoY comparisons</span>
+            </div>
+            <div class="improve-item">
+              <span class="improve-lbl">No clear flow</span>
+              <span class="arrow">→</span>
+              <span class="improve-fix">Summary → detail layout</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="q-num">Q5</div>
+          <div class="q-text">How do you validate your visualization results?</div>
+          <div class="step-row">
+            <div class="step"><div class="step-num">1</div><div class="step-txt">Cross-check chart values against raw source data (Excel file)</div></div>
+            <div class="step"><div class="step-num">2</div><div class="step-txt">Manually verify key metrics — e.g. 45.7% margin, $481.7B market cap</div></div>
+            <div class="step"><div class="step-num">3</div><div class="step-txt">Confirm date ranges and axis alignment are correct</div></div>
+            <div class="step"><div class="step-num">4</div><div class="step-txt">Sense-check: does the trend match known company history?</div></div>
+          </div>
+          <div class="pill-row">
+            <span class="pill pill-green">Source verified</span>
+            <span class="pill pill-blue">Manually checked</span>
+            <span class="pill pill-warn">Date-aligned</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+</body>
+</html>
